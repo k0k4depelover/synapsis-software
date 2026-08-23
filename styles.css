@@ -635,7 +635,7 @@ button:focus-visible {
 }
 
 
-.404 {
+.error-404 {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -643,6 +643,7 @@ button:focus-visible {
   gap: 20px; /* Espacio entre la imagen y el botón */
   padding: 20px 20px 20px 20px;
   margin: 5%;
+  
 }
 
 
