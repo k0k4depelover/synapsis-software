@@ -80,6 +80,10 @@ h1, h2, h3 {
   letter-spacing: -0.01em;
 }
 
+h3{
+  margin: 5px 0px 7px 0px;
+}
+
 p { color: var(--ink-dim); margin: 0; }
 
 a {
