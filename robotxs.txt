@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Pendiente de cambiar al conseguir el dominio
+# Sitemap: https://dominio.com/sitemap.xml
