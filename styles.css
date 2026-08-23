@@ -334,33 +334,6 @@ button:focus-visible {
   padding: 6rem 2rem;
 }
 
-.image-sequence {
-  margin-top: 3rem;
-  border: 1px solid rgba(196, 196, 196, 0.3);
-  background: var(--bg-raised);
-}
-
-.image-sequence-sticky {
-  position: sticky;
-  top: 80px;
-}
-
-.image-sequence-canvas {
-  aspect-ratio: 16 / 8;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--ink-dim);
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.1em;
-  background:
-    linear-gradient(135deg, rgba(255, 43, 43, 0.05), rgba(255, 122, 26, 0.05));
-}
-
-.image-sequence-canvas::before {
-  content: "[ SECUENCIA DE FRAMES · PENDIENTE ]";
-}
 
 
 .services-section {
@@ -557,9 +530,6 @@ button:focus-visible {
   color: var(--ink-dim);
 }
 
-/* ==========================================================
-   RESPONSIVE
-   ========================================================== */
 
 @media (max-width: 900px) {
   .nav-links {
@@ -599,6 +569,67 @@ button:focus-visible {
 }
 
 
-.sequence-section{
+.sequence-section {
+    height: 500vh;
+}
 
+.canvas-container {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+
+    /* Centra el canvas horizontal y verticalmente */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#sequence-canvas {
+    max-width: 900px;
+    max-height: 100vh;
+    width: 100%;
+    height: 100%;
+
+    /* object-fit asegura que el renderizado de la imagen escale bien dentro del canvas */
+    object-fit: contain;
+    z-index: 1;
+}
+
+/* CAPA SUPERIOR */
+.text-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 25%;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.text-content {
+    text-align: center;
+    max-width: 700px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.text-content.hidden {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.text-content p {
+    font-size: 1.3rem;
+}
+
+/* RESPONSIVE: Oculta el texto en pantallas grandes (min-width: 1024px) */
+@media (min-width: 1024px) {
+    .text-layer {
+        display: none;
+    }
 }

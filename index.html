@@ -13,12 +13,12 @@
     name="description"
     content="Synapsis Software: soluciones web, infraestructura, nube y análisis de datos."
   >
-
+  <base href="./">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Handjet:wght,ELSH@100..900,2&display=swap" rel="stylesheet">
-  <script src="script.js"></script>
-  <link rel="stylesheet" href="styles.css">
+  <script src="./script.js" defer></script>
+  <link rel="stylesheet" href="./styles.css">
 
   <title>Synapsis Software</title>
 </head>
@@ -140,13 +140,20 @@
 
     <section class="sequence-section">
       <div class="canvas-container">
-            <canvas id="sequense-canvas">
+            <canvas id="sequence-canvas"></canvas>
 
+            <div class="text-layer">
+              <div class="text-content">
 
-            </canvas>
+                    <h1 id="sequence-title">
+                        Quiénes somos
+                    </h1>
 
-            <div class="text-content">
-              <h2></h2>
+                    <p id="sequence-description">
+                        Conoce nuestra empresa.
+                    </p>
+
+                </div>
             </div>
 
       </div>
@@ -259,8 +266,6 @@
         </article>
 
 
-        <!-- Servicio -->
-
         <article class="service-card">
 
           <div class="service-card-header">
@@ -284,8 +289,6 @@
 
         </article>
 
-
-        <!-- Servicio -->
 
         <article class="service-card">
 
@@ -313,11 +316,6 @@
       </div>
 
     </section>
-
-
-    <!-- =========================
-         SOBRE NOSOTROS
-    ========================== -->
 
     <section
       id="nosotros"
@@ -401,12 +399,6 @@
       </div>
 
       <div class="faq-list">
-
-        <!--
-          Aquí posteriormente puedes utilizar
-          <details> y <summary>, o implementar
-          una interacción con JavaScript.
-        -->
 
       </div>
 

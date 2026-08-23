@@ -1,58 +1,261 @@
-const frameCount= 53
-const images =[];
+const canvas = document.getElementById("sequence-canvas");
+const ctx = canvas.getContext("2d");
 
-for(let i=0; i < frameCount; i++){
-  const image = new Image();
-  image.src =`/img/frame_${String(i).padStart(4, "0")}.webp`;
-  images.push(image)
+const title = document.getElementById("sequence-title");
+const description = document.getElementById("sequence-description");
+
+const section = document.querySelector(".sequence-section");
+const textContent = document.querySelector(".text-content");
+
+
+const frameCount = 130;
+
+const frames = [];
+
+
+
+for (let i = 0; i <= frameCount; i++) {
+
+    const image = new Image();
+
+    const number = String(i).padStart(5, "0");
+
+    image.src = `./img/frame_${number}.webp`;
+
+    frames.push(image);
 }
 
+function resizeCanvas() {
 
-const canvas = document.getElementById("sequence-canvas")
-const cx = canvas.getContext("2d")
+    const dpr = window.devicePixelRatio || 1;
 
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
 
-function renderFrame(index){
-  const image = images[index];
-  if (!image.complete) return;
+    canvas.style.width = `${window.innerWidth}px`;
+    canvas.style.height = `${window.innerHeight}px`;
 
-  ctx.drawImage(
-    image,
-    0,
-    0,
-    canvas.width,
-    canvas.height
-  )
 }
 
-function drawCover(image){
-  const canvasRatio = canvas.width / canvas.height;
-  const imageRatio = image.width / image.height;
+resizeCanvas();
 
-  let width;
-  let height;
-  let x;
-  let y;
+window.addEventListener("resize", resizeCanvas);
 
-  if(imageRatio > canvasRatio){
-    height = canvas.height;
-    width = height * imageRatio;
 
-    x = (canvas.width - width) / 2 ;
-    y = 0;
+function drawImage(image) {
 
-  } else{
-    width = canvas.width;
-    height = width / imageRatio;
-    x= 0;
-    y = (canvas.height) / 2;
-  }
+    if (!image.complete) {
+        return;
+    }
 
-  ctx.clearRect(
-    0,
-    0,
-    canvas.width,
-    canvas.height
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+
+    const imageWidth = image.width;
+    const imageHeight = image.height;
+
+    const scale = Math.min(
+        canvasWidth / imageWidth,
+        canvasHeight / imageHeight
     );
 
+    const width = imageWidth * scale;
+    const height = imageHeight * scale;
+
+    const x = (canvasWidth - width) / 2;
+    const y = (canvasHeight - height) / 2;
+
+    ctx.clearRect(
+        0,
+        0,
+        canvasWidth,
+        canvasHeight
+    );
+
+    ctx.drawImage(
+        image,
+        x,
+        y,
+        width,
+        height
+    );
 }
+
+
+const textSections = [
+
+    {
+        start: 0,
+        end: 0.25,
+
+        description:
+            "Conoce nuestra empresa."
+    },
+
+    {
+        start: 0.25,
+        end: 0.50,
+        description:
+            "Soluciones diseñadas para nuestros clientes."
+    },
+
+    {
+        start: 0.50,
+        end: 0.75,
+
+        description:
+            "Experiencia y tecnología para crear soluciones."
+    },
+
+    {
+        start: 0.75,
+        end: 1,
+        description:
+            "Estamos listos para ayudarte."
+    }
+
+];
+
+
+let currentTextSection = null;
+
+
+function updateText(progress) {
+
+    const newSection = textSections.find(section => {
+
+        return (
+            progress >= section.start &&
+            progress < section.end
+        );
+
+    });
+
+
+    if (!newSection) {
+        return;
+    }
+
+
+    // Si seguimos dentro del mismo texto,
+    // no hacemos nada.
+    if (newSection === currentTextSection) {
+        return;
+    }
+
+
+    currentTextSection = newSection;
+
+
+    // Animación de salida
+    textContent.classList.add("hidden");
+
+
+    setTimeout(() => {
+
+        description.textContent =
+            newSection.description;
+
+        textContent.classList.remove("hidden");
+
+    }, 300);
+
+}
+
+
+// ============================================
+// SCROLL
+// ============================================
+
+function getScrollProgress() {
+
+    const rect =
+        section.getBoundingClientRect();
+
+
+    const scrollableDistance =
+        section.offsetHeight -
+        window.innerHeight;
+
+
+    let progress =
+        -rect.top /
+        scrollableDistance;
+
+
+    progress =
+        Math.max(0, progress);
+
+    progress =
+        Math.min(1, progress);
+
+
+    return progress;
+
+}
+
+
+// ============================================
+// RENDER
+// ============================================
+
+function render() {
+
+    const progress =
+        getScrollProgress();
+
+
+    // ----------------------------------------
+    // IMAGE
+    // ----------------------------------------
+
+    const frameIndex =
+        Math.floor(
+            progress *
+            (frameCount - 1)
+        );
+
+
+    drawImage(
+        frames[frameIndex]
+    );
+
+
+    // ----------------------------------------
+    // TEXT
+    // ----------------------------------------
+
+    updateText(progress);
+
+}
+
+
+// ============================================
+// SCROLL OPTIMIZADO
+// ============================================
+
+let ticking = false;
+
+
+window.addEventListener("scroll", () => {
+
+    if (!ticking) {
+
+        requestAnimationFrame(() => {
+
+            render();
+
+            ticking = false;
+
+        });
+
+        ticking = true;
+    }
+
+});
+
+frames[0].onload = () => {
+
+    render();
+
+};
