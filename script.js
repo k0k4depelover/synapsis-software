@@ -1,29 +1,72 @@
 const canvas = document.getElementById("sequence-canvas");
 const ctx = canvas.getContext("2d");
 
-const title = document.getElementById("sequence-title");
 const description = document.getElementById("sequence-description");
 
 const section = document.querySelector(".sequence-section");
 const textContent = document.querySelector(".text-content");
 
 
-const frameCount = 130;
+const frameCount = 121;
 
-const frames = [];
+const frames = new Array(frameCount);
+
+isPreloadingStarted = false;
 
 
-
-for (let i = 0; i <= frameCount; i++) {
+function loadImage(index){
+    if (frames[index]) return frames[index];
 
     const image = new Image();
-
-    const number = String(i).padStart(5, "0");
-
-    image.src = `./img/frame_${number}.webp`;
-
-    frames.push(image);
+    const number = String(index).padStart(5, "0");
+    image.src = `./frames/frame_${number}.webp`;
+    frames[index] = image;
+    return image;
 }
+
+const firstFrame = loadImage(0);
+firstFrame.onload = () => {
+    render();
+};
+
+
+async function preloadImages() {
+    if (isPreloadingStarted) return;
+    isPreloadingStarted = true;
+
+    for (let i = 1; i <= 16; i++) {
+        if (i < frameCount) loadImage(i);
+    }
+
+
+    for (let i = 17; i < frameCount; i++) {
+        await new Promise((resolve) => {
+            const img = loadImage(i);
+            if (img.complete) {
+                resolve();
+            } else {
+                img.onload = () => resolve();
+                img.onerror = () => resolve(); // Previene bloqueos si falla un asset
+            }
+        });
+    }
+}
+
+const observer = new IntersectionObserver((entries) =>{
+    entries.forEach((entry)=>{
+        if(entry.isIntersecting){
+            preloadImages();
+            observer.disconnect();
+        }
+    });
+},   {
+    rootMargin: "100px 0px"
+});
+
+if (section) {
+    observer.observe(section);
+}
+
 
 function resizeCanvas() {
 
@@ -89,14 +132,14 @@ const textSections = [
         end: 0.25,
 
         description:
-            "Conoce nuestra empresa."
+            "Da un impulso digital a tu negocio."
     },
 
     {
         start: 0.25,
         end: 0.50,
         description:
-            "Soluciones diseñadas para nuestros clientes."
+            "Soluciones diseñadas a tu medida."
     },
 
     {
@@ -104,14 +147,14 @@ const textSections = [
         end: 0.75,
 
         description:
-            "Experiencia y tecnología para crear soluciones."
+            "Conocemos cada pieza para impulsar tu negocio."
     },
 
     {
         start: 0.75,
         end: 1,
         description:
-            "Estamos listos para ayudarte."
+            "¿Estas listo?"
     }
 
 ];
@@ -136,9 +179,6 @@ function updateText(progress) {
         return;
     }
 
-
-    // Si seguimos dentro del mismo texto,
-    // no hacemos nada.
     if (newSection === currentTextSection) {
         return;
     }
@@ -194,11 +234,6 @@ function getScrollProgress() {
 
 }
 
-
-// ============================================
-// RENDER
-// ============================================
-
 function render() {
 
     const progress =
@@ -220,19 +255,9 @@ function render() {
         frames[frameIndex]
     );
 
-
-    // ----------------------------------------
-    // TEXT
-    // ----------------------------------------
-
     updateText(progress);
 
 }
-
-
-// ============================================
-// SCROLL OPTIMIZADO
-// ============================================
 
 let ticking = false;
 

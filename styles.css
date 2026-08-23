@@ -616,6 +616,7 @@ button:focus-visible {
     text-align: center;
     max-width: 700px;
     transition: opacity 0.3s ease, transform 0.3s ease;
+    font-family: var(--font-display);
 }
 
 .text-content.hidden {
@@ -643,8 +644,14 @@ button:focus-visible {
   gap: 20px; /* Espacio entre la imagen y el botón */
   padding: 20px 20px 20px 20px;
   margin: 5%;
-  
+
 }
 
 
-
+#sequence-description{
+  font-family: var(--font-mono);
+  color: var(--red);
+  text-shadow: var(--glow-red);
+  font-size: 40px;
+  filter: blur(1px);
+}
