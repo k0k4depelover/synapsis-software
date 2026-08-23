@@ -635,18 +635,12 @@ button:focus-visible {
 }
 
 
-
-
-.404{
-
-    max-width: 900px;
-    max-height: 100vh;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    /* object-fit asegura que el renderizado de la imagen escale bien dentro del canvas */
-    object-fit: contain;
-    z-index: 1;
+.404 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px; /* Espacio entre la imagen y el botón */
 }
 
 
