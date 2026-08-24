@@ -633,11 +633,7 @@ button:focus-visible {
 }
 
 /* RESPONSIVE: Oculta el texto en pantallas grandes (min-width: 1024px) */
-@media (min-width: 1024px) {
-    .text-layer {
-        display: none;
-    }
-}
+
 
 
 .error-404 {
